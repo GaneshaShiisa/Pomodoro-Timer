@@ -23,7 +23,7 @@ Pomodoro Timerは、いわゆる[ポモドーロテクニック](https://ja.wiki
 # Usage
  
 ```bash
-python Pomodoro_timer.py
+python pomodoro_timer.py
 ```
  
 # Note
