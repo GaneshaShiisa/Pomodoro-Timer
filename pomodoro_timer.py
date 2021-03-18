@@ -7,6 +7,7 @@ Pomodoro Timerは、いわゆるポモドーロテクニック用のタイマー
 
 import time
 import wx
+import pyautogui
 
 
 class MainWindow(wx.Frame):
@@ -81,9 +82,11 @@ class MainWindow(wx.Frame):
         """
         mainは、メイン処理です。
         """
-        print(self.status, self.pause_time_buf)
+        # print(self.status, self.pause_time_buf)
         self.event = event
         self.count = self.count + 1
+
+        pyautogui.press("shift")
 
         if self.status == self.STATUS_WORK_PAUSE or self.status == self.STATUS_BREAK_PAUSE:
             pause_time_tmp = time.time() - self.pause_time_buf
@@ -148,8 +151,6 @@ class MainWindow(wx.Frame):
             self.status = self.STATUS_WORK_PAUSE
         elif self.status == self.STATUS_BREAK:
             self.status = self.STATUS_BREAK_PAUSE
-
-        print("button_pause")
 
     def evt_button_stop(self, event):
         """「stop」ボタンが押された時の処理
