@@ -74,6 +74,9 @@ class MainWindow(wx.Frame):
         self.pause_time_buf = 0
         self.event = ""
 
+        self.previous_position = pyautogui.position()
+        self.active_time = time.time()
+
         self.status = self.STATUS_STOP
 
         self.Show()
@@ -86,7 +89,13 @@ class MainWindow(wx.Frame):
         self.event = event
         self.count = self.count + 1
 
-        pyautogui.press("shift")
+        if self.previous_position != pyautogui.position():
+            self.previous_position = pyautogui.position()
+            self.active_time = time.time()
+
+        if (time.time() - self.active_time) >= 60:
+            pyautogui.press("shift")
+            self.active_time = time.time()
 
         if self.status == self.STATUS_WORK_PAUSE or self.status == self.STATUS_BREAK_PAUSE:
             pause_time_tmp = time.time() - self.pause_time_buf
