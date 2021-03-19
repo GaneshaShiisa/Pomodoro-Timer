@@ -8,6 +8,7 @@ Pomodoro Timerは、いわゆるポモドーロテクニック用のタイマー
 import time
 import wx
 import pyautogui
+import winsound
 
 
 class MainWindow(wx.Frame):
@@ -78,6 +79,7 @@ class MainWindow(wx.Frame):
         self.active_time = time.time()
 
         self.status = self.STATUS_STOP
+        self.flash_count = 0
 
         self.Show()
 
@@ -108,8 +110,10 @@ class MainWindow(wx.Frame):
             remaining_time = 0
             if self.status == self.STATUS_WORK:
                 self.status = self.STATUS_WORK_END
+                self.flash_count = 0
             elif self.status == self.STATUS_BREAK:
                 self.status = self.STATUS_BREAK_END
+                self.flash_count = 0
 
         time_mm, time_ss = divmod(remaining_time, 60)
         self.s_text_mm.SetLabel('{:>2}'.format(time_mm))
@@ -117,11 +121,34 @@ class MainWindow(wx.Frame):
 
         if self.status == self.STATUS_WORK_END:
             self.pause_time = 0
-            self.status = self.STATUS_STOP
+            if self.flash_count == 0:
+                winsound.PlaySound("Clock-Alarm05.wav",
+                                   winsound.SND_FILENAME | winsound.SND_ASYNC | winsound.SND_LOOP)
+            self.flash_count += 1
+            if self.flash_count % 2 == 1:
+                self.SetBackgroundColour("red")
+            else:
+                self.SetBackgroundColour(wx.NullColour)
+            self.Refresh()
+            if self.flash_count >= 15:
+                winsound.PlaySound(None, winsound.SND_ASYNC)
+            # if self.flash_count >= 40:
+            #     self.status = self.STATUS_STOP
 
         if self.status == self.STATUS_BREAK_END:
             self.pause_time = 0
-            self.status = self.STATUS_STOP
+            if self.flash_count == 0:
+                winsound.PlaySound("Clock-Alarm05.wav",
+                                   winsound.SND_FILENAME | winsound.SND_ASYNC | winsound.SND_LOOP)
+            self.flash_count += 1
+            if self.flash_count % 2 == 1:
+                self.SetBackgroundColour("SPRING GREEN")
+            else:
+                self.SetBackgroundColour(wx.NullColour)
+            self.Refresh()
+            if self.flash_count >= 10:
+                winsound.PlaySound(None, winsound.SND_ASYNC)
+                # self.status = self.STATUS_STOP
 
     def evt_button_work_start(self, event):
         """「work_start」ボタンが押された時の処理
@@ -133,7 +160,8 @@ class MainWindow(wx.Frame):
             self.base_time = time.time() + 25
             self.pause_time = 0
             self.pause_time_buf = 0
-
+        self.SetBackgroundColour(wx.NullColour)
+        self.Refresh()
         self.status = self.STATUS_WORK
 
     def evt_button_break_start(self, event):
@@ -147,6 +175,8 @@ class MainWindow(wx.Frame):
             self.pause_time = 0
             self.pause_time_buf = 0
 
+        self.SetBackgroundColour(wx.NullColour)
+        self.Refresh()
         self.status = self.STATUS_BREAK
 
     def evt_button_pause(self, event):
@@ -165,6 +195,8 @@ class MainWindow(wx.Frame):
         """「stop」ボタンが押された時の処理
         """
         self.event = event
+        self.SetBackgroundColour(wx.NullColour)
+        self.Refresh()
         self.status = self.STATUS_STOP
         self.base_time = time.time()
         self.pause_time = 0
