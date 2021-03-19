@@ -19,7 +19,7 @@ Pomodoro Timerは、いわゆる[ポモドーロテクニック](https://ja.wiki
  
 * python
 * wxPython
-* 
+* pyautogui
   
 # Usage
  
