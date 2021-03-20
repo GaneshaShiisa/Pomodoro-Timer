@@ -9,6 +9,8 @@ import time
 import winsound
 import wx
 import pyautogui
+import win32gui
+import win32con
 
 
 class MainWindow(wx.Frame):
@@ -82,6 +84,8 @@ class MainWindow(wx.Frame):
         self.status = self.STATUS_STOP
         self.flash_count = 0
 
+        self.hwnd = win32gui.FindWindow(None, title)
+
         self.Show()
 
     def main(self, event):
@@ -127,6 +131,10 @@ class MainWindow(wx.Frame):
             if self.flash_count == 0:
                 winsound.PlaySound("Clock-Alarm05.wav",
                                    winsound.SND_FILENAME | winsound.SND_ASYNC | winsound.SND_LOOP)
+                win32gui.SetWindowPos(self.hwnd, win32con.HWND_TOPMOST, 0,
+                                      0, 0, 0, win32con.SWP_NOMOVE | win32con.SWP_NOSIZE)
+                win32gui.SetWindowPos(self.hwnd, win32con.HWND_NOTOPMOST, 0,
+                                      0, 0, 0, win32con.SWP_NOMOVE | win32con.SWP_NOSIZE)
             self.flash_count += 1
             if self.flash_count % 2 == 1:
                 self.SetBackgroundColour("red")
@@ -143,6 +151,10 @@ class MainWindow(wx.Frame):
             if self.flash_count == 0:
                 winsound.PlaySound("Clock-Alarm05.wav",
                                    winsound.SND_FILENAME | winsound.SND_ASYNC | winsound.SND_LOOP)
+                win32gui.SetWindowPos(self.hwnd, win32con.HWND_TOPMOST, 0,
+                                      0, 0, 0, win32con.SWP_NOMOVE | win32con.SWP_NOSIZE)
+                win32gui.SetWindowPos(self.hwnd, win32con.HWND_NOTOPMOST, 0,
+                                      0, 0, 0, win32con.SWP_NOMOVE | win32con.SWP_NOSIZE)
             self.flash_count += 1
             if self.flash_count % 2 == 1:
                 self.SetBackgroundColour("SPRING GREEN")
@@ -160,10 +172,11 @@ class MainWindow(wx.Frame):
         if self.status == self.STATUS_WORK_PAUSE:
             self.pause_time += time.time() - self.pause_time_buf
         else:
-            self.base_time = time.time() + 25
+            self.base_time = time.time() + 25*60
             self.pause_time = 0
             self.pause_time_buf = 0
         self.SetBackgroundColour(wx.NullColour)
+        winsound.PlaySound(None, winsound.SND_ASYNC)
         self.Refresh()
         self.button_break_start.Disable()
         self.status = self.STATUS_WORK
@@ -175,11 +188,12 @@ class MainWindow(wx.Frame):
         if self.status == self.STATUS_BREAK_PAUSE:
             self.pause_time += time.time() - self.pause_time_buf
         else:
-            self.base_time = time.time() + 5
+            self.base_time = time.time() + 5*60
             self.pause_time = 0
             self.pause_time_buf = 0
 
         self.SetBackgroundColour(wx.NullColour)
+        winsound.PlaySound(None, winsound.SND_ASYNC)
         self.Refresh()
         self.button_work_start.Disable()
         self.status = self.STATUS_BREAK
@@ -201,6 +215,7 @@ class MainWindow(wx.Frame):
         """
         self.event = event
         self.SetBackgroundColour(wx.NullColour)
+        winsound.PlaySound(None, winsound.SND_ASYNC)
         self.Refresh()
         self.status = self.STATUS_STOP
         self.base_time = time.time()
