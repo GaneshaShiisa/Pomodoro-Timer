@@ -16,6 +16,7 @@ There are many other timers for the Pomodoro technique, but this timer has the f
 * This can pause the timer.
 * This can be stopped in the middle.
 * This does not put your PC to sleep or wake up. (Use the keyboard regularly)
+
 ポモドーロテクニック用のタイマーは他にもたくさんありますが、以下の点で優れています。
 * タイマーを一時停止することができる。
 * 途中で停止することができる。
@@ -24,6 +25,7 @@ There are many other timers for the Pomodoro technique, but this timer has the f
 The following are the normal functions of the timer for the Pomodoro technique (what I think)
 * A work timer (25-minute timer) and a break timer (5-minute timer) are available.
 * Flashe and sound when the timer expires (Display in the foreground)
+
 以下は、通常のポモドーロテクニック用タイマーの機能（っと思っているもの）
 * 作業タイマー（25分タイマー）と休憩タイマー（５分タイマー）が用意されています。
 * タイマーが終了すると、点滅と音で知らせます。（最前面に表示します）
@@ -35,6 +37,7 @@ The following are the normal functions of the timer for the Pomodoro technique (
 * pyautogui
 * pywin32
 * winsound
+
 (windows10での使用を前提としています。)
 
 # Usage
