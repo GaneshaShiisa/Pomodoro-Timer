@@ -6,9 +6,9 @@ Pomodoro Timerは、いわゆるポモドーロテクニック用のタイマー
 """
 
 import time
+import winsound
 import wx
 import pyautogui
-import winsound
 
 
 class MainWindow(wx.Frame):
@@ -37,13 +37,14 @@ class MainWindow(wx.Frame):
         s_text_colon.SetFont(font)
         self.s_text_ss.SetFont(font)
 
-        button_work_start = wx.Button(panel, wx.ID_ANY, '作業 ▶')
-        button_break_start = wx.Button(panel, wx.ID_ANY, '休憩 ▶')
+        self.button_work_start = wx.Button(panel, wx.ID_ANY, '作業 ▶')
+        self.button_break_start = wx.Button(panel, wx.ID_ANY, '休憩 ▶')
         button_pause = wx.Button(panel, wx.ID_ANY, '一時停止')
         button_stop = wx.Button(panel, wx.ID_ANY, '停止')
 
-        button_work_start.Bind(wx.EVT_BUTTON, self.evt_button_work_start)
-        button_break_start.Bind(wx.EVT_BUTTON, self.evt_button_break_start)
+        self.button_work_start.Bind(wx.EVT_BUTTON, self.evt_button_work_start)
+        self.button_break_start.Bind(
+            wx.EVT_BUTTON, self.evt_button_break_start)
         button_pause.Bind(wx.EVT_BUTTON, self.evt_button_pause)
         button_stop.Bind(wx.EVT_BUTTON, self.evt_button_stop)
 
@@ -55,9 +56,9 @@ class MainWindow(wx.Frame):
         time_layout.AddStretchSpacer(prop=1)
 
         operation_layout = wx.GridSizer(rows=2, cols=2, gap=(0, 0))
-        operation_layout.Add(button_work_start, flag=wx.EXPAND)
+        operation_layout.Add(self.button_work_start, flag=wx.EXPAND)
         operation_layout.Add(button_pause, flag=wx.EXPAND)
-        operation_layout.Add(button_break_start, flag=wx.EXPAND)
+        operation_layout.Add(self.button_break_start, flag=wx.EXPAND)
         operation_layout.Add(button_stop, flag=wx.EXPAND)
 
         top_layout = wx.BoxSizer(wx.HORIZONTAL)
@@ -110,9 +111,11 @@ class MainWindow(wx.Frame):
             remaining_time = 0
             if self.status == self.STATUS_WORK:
                 self.status = self.STATUS_WORK_END
+                self.button_break_start.Enable()
                 self.flash_count = 0
             elif self.status == self.STATUS_BREAK:
                 self.status = self.STATUS_BREAK_END
+                self.button_work_start.Enable()
                 self.flash_count = 0
 
         time_mm, time_ss = divmod(remaining_time, 60)
@@ -162,6 +165,7 @@ class MainWindow(wx.Frame):
             self.pause_time_buf = 0
         self.SetBackgroundColour(wx.NullColour)
         self.Refresh()
+        self.button_break_start.Disable()
         self.status = self.STATUS_WORK
 
     def evt_button_break_start(self, event):
@@ -177,6 +181,7 @@ class MainWindow(wx.Frame):
 
         self.SetBackgroundColour(wx.NullColour)
         self.Refresh()
+        self.button_work_start.Disable()
         self.status = self.STATUS_BREAK
 
     def evt_button_pause(self, event):
@@ -201,6 +206,8 @@ class MainWindow(wx.Frame):
         self.base_time = time.time()
         self.pause_time = 0
         self.pause_time_buf = 0
+        self.button_work_start.Enable()
+        self.button_break_start.Enable()
 
 
 app = wx.App(False)
