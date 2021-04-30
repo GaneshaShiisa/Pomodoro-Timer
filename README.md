@@ -8,7 +8,7 @@ Pomodoro Timerは、いわゆる[ポモドーロテクニック](https://ja.wiki
  
 # DEMO
  
-***
+![demo](https://github.com/GaneshaShiisa/Pomodoro_Timer/blob/main/demo.gif)
 
 # Features
 
